@@ -2,7 +2,10 @@ package com.example.newsapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,5 +42,36 @@ public class NewsDetailActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(imageUrl)
                 .into(imageView);
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.share:
+                shareNote();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share_menu, menu);
+        return true;
+    }
+    private void shareNote() {
+
+        String newsTitle=titleTextView.getText().toString();
+        String newsContent=contentTextView.getText().toString();
+
+
+        String noteContent = "This is the content of the note. It can contain detailed information about the note.";
+
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, newsTitle);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, newsContent);
+
+
+        startActivity(Intent.createChooser(shareIntent, "Share via"));
     }
 }
